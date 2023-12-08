@@ -15,7 +15,7 @@ class Userz(db.Model):
     email = db.Column(db.String(200), nullable=False)
     password = db.Column(db.String(100), nullable=False)
 
-    def as_dict(self):
+    def __repr__(self):
         return {"name":self.name, "email":self.email}
 
 
@@ -44,7 +44,7 @@ class Bidder(db.Model):
 
     def __repr__(self):
         return f"Bidder(id_user = {self.id_user}, id_dog = {self.id_dog}, initial_price = {self.initial_price}, last_price = {self.last_price}, current_price = {self.current_price}, sold = {self.sold})"
-db.create_all()
+# db.create_all()
 
 
 user_parser = reqparse.RequestParser()
@@ -81,26 +81,28 @@ resource_fields_dogs = {
 resource_fields_users = {
     'user_id': fields.Integer,
     'name': fields.String,
-    'email': fields.String
+    'email': fields.String,
+    'password': fields.String
 }
 
 
 class User(Resource): 
-    @marshal_with(resource_fields_users)
+    # @marshal_with(resource_fields_users)
     def post(self, user_id):
         args = user_parser.parse_args()
         user = Userz(id=args["user_id"], name=args["name"], email=args["email"], password=args["password"])
         db.session.add(user)
         db.session.commit()
-        return jsonify({"message":"User created successfully", "user":user.name})
+        return jsonify({"message": "User created successfully", "user": user.name, "email": user.email})
+
+
 class Get_user(Resource):
-    @marshal_with(resource_fields_users)
     def get(self, user_id):
         result = Userz.query.filter_by(id=user_id).first()
         if not result:
             abort(404, message="User not found")
         return jsonify({"name": result.name, "email": result.email})
-        
+
 
 class Dog(Resource):
     @marshal_with(resource_fields_dogs)
