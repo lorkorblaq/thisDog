@@ -1,13 +1,13 @@
 import requests
 
 BASE = "http://127.0.0.1:5000/api"
-user_id = 6
+user_id = 29
 dog_id = 2
 price = 1000
 
 # Use requests.post for sending data in the request body
 
-response = requests.post(BASE + f"/user/6/", data={"name":"femi", "email":"test@gmail.com", "password":"pass"})
+response = requests.post(BASE + f"/user/{user_id}/", data={"user_id":user_id, "name":"femi", "email":"test@gmail.com", "password":"pass"})
 # response1 = requests.get(BASE + f"/bid/")
 
 # Check if the request was successful (status code 200)

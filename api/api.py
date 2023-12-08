@@ -15,8 +15,8 @@ class Userz(db.Model):
     email = db.Column(db.String(200), nullable=False)
     password = db.Column(db.String(100), nullable=False)
 
-    def __repr__(self):
-        return f"User(name = {self.name}, email = {self.email})"
+    def as_dict(self):
+        return {"name":self.name, "email":self.email}
 
 
 class Dogz(db.Model):
@@ -33,18 +33,18 @@ class Dogz(db.Model):
 class Bidder(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, nullable=True)
-    id_user = db.Column(db.Integer, ForeignKey('userz.id'), nullable=False)
-    user = relationship("userz", backref="bids")
+    id_user = db.Column(db.Integer, ForeignKey("userz.id"), nullable=False)
+    user = relationship("Userz", backref="bids", foreign_keys=[id_user])
     id_dog = db.Column(db.Integer, ForeignKey('dogz.id'), nullable=False)
-    dog = relationship("dogz", backref="bids")
+    dog = relationship("Dogz", backref="bids", foreign_keys=[id_dog])
     initial_price = db.Column(db.Integer, nullable=True)
     last_price = db.Column(db.Integer, nullable=True)
     current_price = db.Column(db.Integer, nullable=False)
     sold = db.Column(db.Boolean, nullable=True)
 
     def __repr__(self):
-        return f"Bid(id_user = {self.id_user}, id_dog = {self.id_dog}, initial_price = {self.initial_price}, last_price = {self.last_price}, current_price = {self.current_price}, sold = {self.sold})"
-
+        return f"Bidder(id_user = {self.id_user}, id_dog = {self.id_dog}, initial_price = {self.initial_price}, last_price = {self.last_price}, current_price = {self.current_price}, sold = {self.sold})"
+db.create_all()
 
 
 user_parser = reqparse.RequestParser()
@@ -59,8 +59,6 @@ user_parser.add_argument("password", type=str, help="Password is required", requ
 bid_parser = reqparse.RequestParser()
 bid_parser.add_argument("dog_id", type=int, help="id of DOg is required", required=True)
 bid_parser.add_argument("price", type=int, help="Price of the bid is required", required=True)
-
-
 
 resource_fields_bid = {
     'id': fields.Integer,
@@ -91,10 +89,10 @@ class User(Resource):
     @marshal_with(resource_fields_users)
     def post(self, user_id):
         args = user_parser.parse_args()
-        user = Userz(id=user_id, name=args["name"], email=args["email"], password=args["password"])
+        user = Userz(id=args["user_id"], name=args["name"], email=args["email"], password=args["password"])
         db.session.add(user)
         db.session.commit()
-        return jsonify({"message":"User created successfully", "user":user})
+        return jsonify({"message":"User created successfully", "user":user.name})
 class Get_user(Resource):
     @marshal_with(resource_fields_users)
     def get(self, user_id):
