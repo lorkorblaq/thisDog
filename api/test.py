@@ -7,13 +7,30 @@ price = 1000
 
 # Use requests.post for sending data in the request body
 
-response = requests.post(BASE + f"/user/{user_id}/", json={
-    "user_id": user_id, 
-    "name": "femi", 
-    "email": "test@gmail.com", 
-    "password": "pass"
-})
-# response = requests.get(BASE + f"/user/{user_id}/")
+# response = requests.post(BASE + f"/user/", json={
+#     "name":"blaq", 
+#     "email":"fa.mail", 
+#     "password":"passer",
+# })
+
+# response = requests.get(BASE + f"/user/get/{user_id}/")
+
+
+
+
+# response = requests.post(BASE + f"/dog/create/", json={
+#     "name":"browner", 
+#     "image":"/image/husky.jpg", 
+#     "breed":"husky", 
+#     "aggression":5, 
+#     "intel":4
+# })
+
+
+# response = requests.get(BASE + f"/dog/get/{dog_id}")
+
+
+response = requests.post(BASE + f"/bid/create/", json={
 
 
 # Check if the request was successful (status code 200)
