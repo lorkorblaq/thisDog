@@ -157,9 +157,11 @@ class Create_bid(Resource):
             current_price = args["current_price"], 
             sold = args["sold"]
         )
+        
 
         db.session.add(bid)
         db.session.commit()
+
 
         # Do something with the bid information
         return jsonify({

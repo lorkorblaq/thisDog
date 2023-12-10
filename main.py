@@ -1,7 +1,9 @@
 from flask import Flask, render_template, Blueprint
-from home import home
+from home import home_page
+
 app = Flask(__name__)
-app.register_blueprint(second, url_prefix="")
+
+app.register_blueprint(home_page, url_prefix="")
 
 if __name__ == "__main__":
     app.run(debug=True)
