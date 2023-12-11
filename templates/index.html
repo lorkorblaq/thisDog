@@ -8,27 +8,34 @@
             <div class="lab">
                 <h2>Hub</h2>
                 <section class="s-lab">
-                    <article class=" art">
-                        <div class="title">
-                            <p></p>
-                        
-                        </div>
-                        <div class="descrip">
-                           <p> This is the best dog hub  in the world, sometimes <br>its seem dy are good sometimes if not most dy treat dogs well</p>
-                        </div>
-                        <div class="checks">
-                                <DIV class="highlights1">
-                                    <div class = 'no'>No. of bids: 6</div>
-                                    <div class ='locss'>locations: 2</div>
-                                    <div class = 'hms'>Home Service: yes</div>
-                                </DIV>
-                                <DIV class="h-detail">
-                                    Details: Husky are very beautiful dogs
-                                </DIV>
-                        </div>
-                    </article> 
+		    {% for dog in dogs["dogs"] %}
+                    	<article class=" art">
+				<div class="title">
+					<h1>{{ dog['name'] }}</h1>
+					<h5>{{ dog['breed'] }}</h5>
+				</div>
+				<img src="{{ dog['image'] }}" alt="dog picture">
+                        	<div class="descrip">
+                          
+			    		<p>Aggression level:{{ dog['aggression'] }} </p>
+			    		<p>Intelligence level:{{ dog['intel'] }}</p>
+
+				</div>
+                        	<div class="checks">
+                                	<div class="highlights1">
+                                    		<div class = 'no'>No. of bids: 6</div>
+                                    		<div class ='locss'>locations: 2</div>
+                                    		<div class = 'hms'>Home Service: yes</div>
+                                	</div>
+                                </div>
+				<div class="h-detail">
+                                   <h1>Details: Husky are very beautiful dogs</h1>
+                                </div>
+                        	
+                    </article>
+		    {% endfor %} 
                 </section>
             </div>
-        </main>
-
+	</main>
 {% endblock %}
+

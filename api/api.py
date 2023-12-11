@@ -9,8 +9,9 @@ from datetime import datetime
 app = Flask(__name__)
 api = Api(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-app.config['SQLALCHEMY_ECHO'] = True
+
 
 class Userz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -128,9 +129,19 @@ class Create_dog(Resource):
 
 class Get_dog(Resource):
     # @marshal_with(resource_fields_dogs)
-    def get(self, dog_id):
-        result = Dogz.query.filter_by(id=dog_id).first()
-        return jsonify({"name": result.name, "image": result.image, "breed": result.breed, "aggression": result.aggression, "intel": result.intel}) 
+	def get(self):
+		results = Dogz.query.all()
+		dogs_list = []
+		for result in results:
+			dog_info = {
+				"name":result.name,
+				"image":result.image,
+				"breed":result.breed,
+				"aggression":result.aggression,
+				"intel": result.intel
+			}
+			dogs_list.append(dog_info)
+		return jsonify({"dogs":dogs_list})
 
 
 #bid related api
@@ -199,7 +210,7 @@ class Get_bid(Resource):
 api.add_resource(Create_user, "/api/user/create/")
 api.add_resource(Get_user, "/api/user/get/<int:user_id>/")
 api.add_resource(Create_dog, "/api/dog/create/")
-api.add_resource(Get_dog, "/api/dog/get/<int:dog_id>/")
+api.add_resource(Get_dog, "/api/dog/get/")
 # api.add_resource(breeds, "api/<breeds>")
 api.add_resource(Get_bid, "/api/bid/get/<int:bid_id>")
 api.add_resource(Create_bid, "/api/bid/create/")
@@ -208,4 +219,4 @@ api.add_resource(Create_bid, "/api/bid/create/")
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=5000, debug=True)
