@@ -13,7 +13,7 @@ price = 1000
 #     "password":"passer",
 # })
 
-# response = requests.get(BASE + f"/user/get/{user_id}/")
+response = requests.get(BASE + f"/user/get/")
 
 
 
@@ -30,14 +30,14 @@ price = 1000
 # response = requests.get(BASE + f"/dog/get/{dog_id}")
 
 
-response = requests.post(BASE + "/bid/create/", json={
-    "id_user": 1,
-    "id_dog": 1,
-    "initial_price": 20,
-    "last_price": 40,
-    "current_price": 30,
-    "sold": False
-})
+# response = requests.post(BASE + "/bid/create/", json={
+#     "id_user": 1,
+#     "id_dog": 1,
+#     "initial_price": 20,
+#     "last_price": 40,
+#     "current_price": 30,
+#     "sold": False
+# })
 
 # Check if the request was successful (status code 200)
 if response.status_code == 200:

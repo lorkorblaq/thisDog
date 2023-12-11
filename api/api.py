@@ -110,8 +110,14 @@ class Create_user(Resource):
         return jsonify({"message": "User created successfully", "userid":user.id, "user": user.name, "email": user.email})
 
 class Get_user(Resource):
-    def get(self, user_id):
+    def get_id(self, user_id):
         result = Userz.query.filter_by(id=user_id).first()
+        if not result:
+            abort(404, message="User not found")
+        return jsonify({"name": result.name, "email": result.email})
+
+    def get_all(self):
+        result = Userz.query.all()
         if not result:
             abort(404, message="User not found")
         return jsonify({"name": result.name, "email": result.email})
@@ -208,7 +214,7 @@ class Get_bid(Resource):
 
 
 api.add_resource(Create_user, "/api/user/create/")
-api.add_resource(Get_user, "/api/user/get/<int:user_id>/")
+api.add_resource(Get_user, "/api/user/get/")
 api.add_resource(Create_dog, "/api/dog/create/")
 api.add_resource(Get_dog, "/api/dog/get/")
 # api.add_resource(breeds, "api/<breeds>")
