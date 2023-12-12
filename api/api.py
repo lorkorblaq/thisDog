@@ -4,6 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
+from ../models.engine import db_storage
+
+db = db_storage()
 
 
 app = Flask(__name__)
@@ -104,18 +107,21 @@ resource_fields_bid = {
 class User(Resource):
     def get(self, user_id):
         result = Userz.query.filter_by(id=user_id).first()
+        #result = db.Userz.query.filter_by(id=user_id).first()
         if not result:
             abort(404, message="User not found")
         return jsonify({"name": result.name, "email": result.email})
     
     def put(self, user_id):
         result = Userz.query.filter_by(id=user_id).first()
+        #result = db.Userz.query.filter_by(id=user_id).first()
         if not result:
             abort(404, message="User not found")
         return jsonify({"name": result.name, "email": result.email})
 
     def delete(self, user_id):
         result = Userz.query.filter_by(id=user_id).first()
+        #result = db.Userz.query.filter_by(id=user_id).first()
         if not result:
             abort(404, message="User not found")
         return jsonify({"name": result.name, "email": result.email})
@@ -126,11 +132,13 @@ class Users(Resource):
     def post(self):
         args = user_parser.parse_args()
         user = Userz(name=args["name"], email=args["email"], password=args["password"])
+        #user = db.Userz(name=args["name"], email=args["email"], password=args["password"])
         db.session.add(user)
         db.session.commit()
         return jsonify({"message": "User created successfully", "userid":user.id, "user": user.name, "email": user.email})
     def get(self):
         result = Userz.query.all()
+        #result = db.Userz.query.all()
         if not result:
             abort(404, message="User not found")
         return jsonify({"name": result.name, "email": result.email})
@@ -153,12 +161,14 @@ class Dogs(Resource):
      def post(self):
         args = dog_parser.parse_args()
         dog = Dogz(name=args["name"], image=args["image"], breed=args["breed"], aggression=args["aggression"], intel= args["intel"])
+        dog = db.Dogz(name=args["name"], image=args["image"], breed=args["breed"], aggression=args["aggression"], intel= args["intel"])
         db.session.add(dog)
         db.session.commit()
         return jsonify({"message": "Dog created successfully","dog Id": dog.id, "name": dog.name,"image": dog.image, "breed": dog.breed})
     
      def get(self):
         results = Dogz.query.all()
+        results = db.Dogz.query.all()
         dogs_list = []
         for result in results:
             dog_info = {
@@ -183,7 +193,9 @@ class Create_bid(Resource):
         dog_id = args['id_dog']
         # Ensure that the provided user and dog IDs exist in the Userz and Dogz tables
         user = Userz.query.get(user_id)
+        user = db.Userz.query.get(user_id)
         dog = Dogz.query.get(dog_id)
+        dog = db.Dogz.query.get(dog_id)
 
 
         if not user:
