@@ -75,10 +75,8 @@ dog_parser.add_argument("intel", type=int, help="Intelligence level needed", req
 bid_parser = reqparse.RequestParser()
 bid_parser.add_argument("id_user", type=int, help="User id of the bid is required", required=True)
 bid_parser.add_argument("id_dog", type=int, help="Dog id of the bid is required", required=True)
-bid_parser.add_argument("initial_price", type=float, help="Initial price of the bid is required", required=True)
-bid_parser.add_argument("last_price", type=float, help="Last price of the bid is required", required=True)
 bid_parser.add_argument("current_price", type=float, help="Current price of the bid is required", required=True)
-bid_parser.add_argument("sold", type=bool, help="Status of bid is required", required=True)
+
 
 
 resource_fields_users = {
@@ -99,10 +97,7 @@ resource_fields_dogs = {
 resource_fields_bid = {
     'id_user': fields.Integer,
     'id_dog': fields.Integer,
-    'initial_price': fields.Integer,
-    'last_price': fields.Integer,
     'current_price': fields.Integer,
-    'sold': fields.Boolean
 }
 
 #user related api
@@ -214,6 +209,7 @@ class Create_bid(Resource):
         args = bid_parser.parse_args()
         user_id = args['id_user']
         dog_id = args['id_dog']
+    
         # Ensure that the provided user and dog IDs exist in the Userz and Dogz tables
         user = Userz.query.get(user_id)
         #user = db.Userz.query.get(user_id)
@@ -259,48 +255,55 @@ class Create_bid(Resource):
             return jsonify({"error": "Price not provided in the request"})
 
 
-class Get_bid(Resource):
+class Bids(Resource):
     def post(self):
-        args = bid_parser.parse_args()
-        user_id = args['id_user']
-        dog_id = args['id_dog']
-        # Ensure that the provided user and dog IDs exist in the Userz and Dogz tables
-        user = Userz.query.get(user_id)
-        #user = db.Userz.query.get(user_id)
-        dog = Dogz.query.get(dog_id)
-        #dog = db.Dogz.query.get(dog_id)
-        bid_on_dog = Bidder.query.filter_by(id_dog=dog_id).first()
-        if not user:
-            abort(404, message=f"User with ID {user_id} not found")
-        if not dog:
-            abort(404, message=f"Dog with ID {dog_id} not found")
+        try:
+            args = bid_parser.parse_args()
+            user_id = args['id_user']
+            dog_id = args['id_dog']
+            current_price = args['current_price']
 
-        if not bid_on_dog:
-            bid = Bidder(
-                id_user = user,
-                id_dog = dog, 
-                initial_price = args["initial_price"], 
-                last_price = args["last_price"], 
-                current_price = args["current_price"], 
-                sold = args["sold"]
-            )
-            db.session.add(bid)
+            # Ensure that the provided user and dog IDs exist in the Userz and Dogz tables
+            user = Userz.query.get(user_id)
+            #user = db.Userz.query.get(user_id)
+            dog = Dogz.query.get(dog_id)
+            #dog = db.Dogz.query.get(dog_id)
+            bid = Bidder.query.all()
+            bid_on_dog = Bidder.query.filter_by(id_dog=dog_id).first()
+
+            if not user:
+                abort(404, message=f"User with ID {user_id} not found")
+            if not dog:
+                abort(404, message=f"Dog with ID {dog_id} not found")
+
+            if not bid_on_dog:
+                bid = Bidder(
+                    id_user = user_id,
+                    id_dog = dog_id, 
+                    initial_price = current_price, 
+                    last_price = current_price, 
+                    current_price = current_price, 
+                )
+                db.session.add(bid)
+                db.session.commit()
+            else:
+                bid_on_dog.last_price = bid_on_dog.current_price
+                bid_on_dog.current_price = current_price
             db.session.commit()
-        else:
-            bid_on_dog.current_price = args["current_price"]
-            bid_on_dog.last_price = args["current_price"]
-            db.session.commit()
-
-
+            return jsonify({
+                "message": f"Bid for user {user_id} received", 
+                "User Id": bid_on_dog.id_user, 
+                "Dog id": bid_on_dog.id_dog, 
+                "Initial Price": bid_on_dog.initial_price,
+                "Last price": bid_on_dog.last_price,
+                "current price": bid_on_dog.current_price,
+            })
+                # 
+        except Exception as e:
+            db.session.rollback()
+            abort(500, message=f"Error: {str(e)}")
 
         # Do something with the bid information
-        return jsonify({
-            "message": f"Bid for user {user_id} received", 
-            "User Id": bid.id_user, 
-            "Dog id": bid.id_dog, 
-            "Price": bid.current_price,
-            "sold": bid.sold
-        })
     # @marshal_with(resource_fields_bid)
     def get(self):
         results = Bidder.query.all()
@@ -333,7 +336,7 @@ api.add_resource(Users, "/api/users/")
 api.add_resource(Dog, "/api/dog/<int:dog_id>/")
 api.add_resource(Dogs, "/api/dogs/")
 # api.add_resource(breeds, "api/<breeds>")
-api.add_resource(Get_bid, "/api/bids/")
+api.add_resource(Bids, "/api/bids/")
 api.add_resource(Create_bid, "/api/bid/create/")
 
 # api.add_resource(dogsOnBid, "/api/dogsOnBids")
