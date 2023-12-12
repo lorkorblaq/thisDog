@@ -142,7 +142,7 @@ class Users(Resource):
 
 #dog related api
 class Dog(Resource): 
-    def get(self, dog_id):
+    def get(self):
         return jsonify({"message": "Dog created successfully"})
     # @marshal_with(resource_fields_users)
      
@@ -239,7 +239,7 @@ class Get_bid(Resource):
 
 api.add_resource(User, "/api/user/<int:user_id>")
 api.add_resource(Users, "/api/users/get/")
-api.add_resource(Dog, "/api/dog/<int:dog_id>/")
+api.add_resource(Dog, "/api/dog/<int:user_id>/")
 api.add_resource(Dogs, "/api/dogs/get/")
 # api.add_resource(breeds, "api/<breeds>")
 api.add_resource(Get_bid, "/api/bid/get/<int:bid_id>")
