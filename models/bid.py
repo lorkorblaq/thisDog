@@ -1,4 +1,4 @@
-from . import db
+from engine import db
 
 class Bid(db.Model):
     id = db.Column(db.Integer, primary_key=True)

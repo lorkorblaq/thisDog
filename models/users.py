@@ -7,3 +7,4 @@ class Userz(db.Model):
 
     def __repr__(self):
         return {"name": self.name, "email": self.email}
+    
