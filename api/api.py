@@ -4,9 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from ../models.engine import db
+# from thisDog.models.engine import db
 
-db = db()
+# db = db()
 
 
 app = Flask(__name__)
@@ -65,6 +65,7 @@ user_parser.add_argument("password", type=str, help="Password is required", requ
 dog_parser = reqparse.RequestParser()
 dog_parser.add_argument("name", type=str, help="Name needed", required=True)
 dog_parser.add_argument("image", type=str, help="Image needed", required=True)
+dog_parser.add_argument("descrip", type=str, help="Description needed", required=True)
 dog_parser.add_argument("breed", type=str, help="Breed needed", required=True)
 dog_parser.add_argument("aggression", type=int, help="Aggresion level needed", required=True)
 dog_parser.add_argument("intel", type=int, help="Intelligence level needed", required=True)
@@ -89,6 +90,7 @@ resource_fields_users = {
 resource_fields_dogs = {
     'name': fields.String,
     'image': fields.String,
+    'descrip': fields.String,
     'breed': fields.String,
     'aggression': fields.Integer,
     'intel': fields.Integer
@@ -131,22 +133,34 @@ class Users(Resource):
     # @marshal_with(resource_fields_users)
     def post(self):
         args = user_parser.parse_args()
+        if Userz.query.filter_by(email=args['email']).first():
+            response = {"message": "Email already exists"}
+            return response, 400
         user = Userz(name=args["name"], email=args["email"], password=args["password"])
         #user = db.Userz(name=args["name"], email=args["email"], password=args["password"])
         db.session.add(user)
         db.session.commit()
-        return jsonify({"message": "User created successfully", "userid":user.id, "user": user.name, "email": user.email})
+        response = {
+            "message": "User created successfully", 
+            "userid":user.id, 
+            "user": user.name, 
+            "email": user.email}
+        return response, 201
+
     def get(self):
-        result = Userz.query.all()
+        results = Userz.query.all()
         #result = db.Userz.query.all()
-        if not result:
+        if not results:
             abort(404, message="User not found")
-        return jsonify({"name": result.name, "email": result.email})
-
-
-
-    
-
+        user_list = []
+        for result in results:
+            user_info = {
+                    "name":result.name,
+                    "email":result.email,
+                    "password":result.password
+            }
+            user_list.append(user_info)
+        return jsonify({"users":user_list})
 
 #dog related api
 class Dog(Resource): 
@@ -160,11 +174,21 @@ class Dogs(Resource):
     # @marshal_with(resource_fields_dogs)
      def post(self):
         args = dog_parser.parse_args()
-        dog = Dogz(name=args["name"], image=args["image"], breed=args["breed"], aggression=args["aggression"], intel= args["intel"])
+        dog = Dogz(name=args["name"], image=args["image"], descrip=args["descrip"], breed=args["breed"], aggression=args["aggression"], intel= args["intel"])
         #dog = db.Dogz(name=args["name"], image=args["image"], breed=args["breed"], aggression=args["aggression"], intel= args["intel"])
         db.session.add(dog)
         db.session.commit()
-        return jsonify({"message": "Dog created successfully","dog Id": dog.id, "name": dog.name,"image": dog.image, "breed": dog.breed})
+        response = {
+            "message": "Dog created successfully", 
+            "dog Id": dog.id, 
+            "name": dog.name,
+            "image": dog.image,
+            "descrip": dog.descrip, 
+            "breed": dog.breed,
+            "aggression": dog.aggression,
+            "intel": dog.intel
+        }
+        return response, 201
     
      def get(self):
         results = Dogz.query.all()
@@ -174,6 +198,7 @@ class Dogs(Resource):
             dog_info = {
                     "name":result.name,
                     "image":result.image,
+                    "descrip":result.descrip,
                     "breed":result.breed,
                     "aggression":result.aggression,
                     "intel": result.intel
@@ -182,8 +207,6 @@ class Dogs(Resource):
         return jsonify({"dogs":dogs_list})
   
    
-
-
 #bid related api
 class Create_bid(Resource):
     #@marshal_with(resource_fields_bid)
@@ -237,9 +260,65 @@ class Create_bid(Resource):
 
 
 class Get_bid(Resource):
+    def post(self):
+        args = bid_parser.parse_args()
+        user_id = args['id_user']
+        dog_id = args['id_dog']
+        # Ensure that the provided user and dog IDs exist in the Userz and Dogz tables
+        user = Userz.query.get(user_id)
+        #user = db.Userz.query.get(user_id)
+        dog = Dogz.query.get(dog_id)
+        #dog = db.Dogz.query.get(dog_id)
+        bid_on_dog = Bidder.query.filter_by(id_dog=dog_id).first()
+        if not user:
+            abort(404, message=f"User with ID {user_id} not found")
+        if not dog:
+            abort(404, message=f"Dog with ID {dog_id} not found")
+
+        if not bid_on_dog:
+            bid = Bidder(
+                id_user = user,
+                id_dog = dog, 
+                initial_price = args["initial_price"], 
+                last_price = args["last_price"], 
+                current_price = args["current_price"], 
+                sold = args["sold"]
+            )
+            db.session.add(bid)
+            db.session.commit()
+        else:
+            bid_on_dog.current_price = args["current_price"]
+            bid_on_dog.last_price = args["current_price"]
+            db.session.commit()
+
+
+
+        # Do something with the bid information
+        return jsonify({
+            "message": f"Bid for user {user_id} received", 
+            "User Id": bid.id_user, 
+            "Dog id": bid.id_dog, 
+            "Price": bid.current_price,
+            "sold": bid.sold
+        })
     # @marshal_with(resource_fields_bid)
-    def get(self, bid_id):
-        return jsonify({"message": "Bid found", "bid": bid_id})
+    def get(self):
+        results = Bidder.query.all()
+        bid_list = []
+        for result in results:
+            bid_info = {
+                    "id_user":result.id_user,
+                    "id_dog":result.id_dog,
+                    "initial_price":result.initial_price,
+                    "last_price":result.last_price,
+                    "current_price":result.current_price,
+                    "sold": result.sold
+            }
+            bid_list.append(bid_info)
+        return jsonify({"bids":bid_list})
+
+    
+
 
 # class dogsOnBid(Resource):
     # def get(self):
@@ -250,11 +329,11 @@ class Get_bid(Resource):
 
 
 api.add_resource(User, "/api/user/<int:user_id>")
-api.add_resource(Users, "/api/users/get/")
+api.add_resource(Users, "/api/users/")
 api.add_resource(Dog, "/api/dog/<int:dog_id>/")
-api.add_resource(Dogs, "/api/dogs/get/")
+api.add_resource(Dogs, "/api/dogs/")
 # api.add_resource(breeds, "api/<breeds>")
-api.add_resource(Get_bid, "/api/bid/get/<int:bid_id>")
+api.add_resource(Get_bid, "/api/bids/")
 api.add_resource(Create_bid, "/api/bid/create/")
 
 # api.add_resource(dogsOnBid, "/api/dogsOnBids")

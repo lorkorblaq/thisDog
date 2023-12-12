@@ -7,23 +7,23 @@ price = 1000
 
 # Use requests.post for sending data in the request body
 
-# response = requests.post(BASE + f"/user/create/", json={
-#     "name":"blaq", 
-#     "email":"fa.mail", 
+# response = requests.post(BASE + f"/users/", json={
+#     "name":"baddest", 
+#     "email":"oloko.mail", 
 #     "password":"passer",
 # })
 
-response = requests.get(BASE + f"/user/get/")
+# response = requests.get(BASE + f"/user/get/")
 
 
 
-
-# response = requests.post(BASE + f"/dog/create/", json={
-#     "name":"browner", 
-#     "image":"/image/husky.jpg", 
-#     "breed":"husky", 
-#     "aggression":5, 
-#     "intel":4
+# response = requests.post(BASE + f"/dogs/", json={
+#     "name":"bluer", 
+#     "image":"/websites/image/dogs/alstatian.jpg",
+#     "descrip": "this is a lovely dog", 
+#     "breed":"alstatian", 
+#     "aggression":3, 
+#     "intel":7
 # })
 
 
