@@ -4,9 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from ../models.engine import db_storage
+from ../models.engine import db
 
-db = db_storage()
+db = db()
 
 
 app = Flask(__name__)
@@ -161,14 +161,14 @@ class Dogs(Resource):
      def post(self):
         args = dog_parser.parse_args()
         dog = Dogz(name=args["name"], image=args["image"], breed=args["breed"], aggression=args["aggression"], intel= args["intel"])
-        dog = db.Dogz(name=args["name"], image=args["image"], breed=args["breed"], aggression=args["aggression"], intel= args["intel"])
+        #dog = db.Dogz(name=args["name"], image=args["image"], breed=args["breed"], aggression=args["aggression"], intel= args["intel"])
         db.session.add(dog)
         db.session.commit()
         return jsonify({"message": "Dog created successfully","dog Id": dog.id, "name": dog.name,"image": dog.image, "breed": dog.breed})
     
      def get(self):
         results = Dogz.query.all()
-        results = db.Dogz.query.all()
+        #results = db.Dogz.query.all()
         dogs_list = []
         for result in results:
             dog_info = {
@@ -193,9 +193,9 @@ class Create_bid(Resource):
         dog_id = args['id_dog']
         # Ensure that the provided user and dog IDs exist in the Userz and Dogz tables
         user = Userz.query.get(user_id)
-        user = db.Userz.query.get(user_id)
+        #user = db.Userz.query.get(user_id)
         dog = Dogz.query.get(dog_id)
-        dog = db.Dogz.query.get(dog_id)
+        #dog = db.Dogz.query.get(dog_id)
 
 
         if not user:

@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+from werkzeug.security import generate_password_hash, check password_hash
 auth = Blueprint("auth", __name__, static_folder="static", template_folder="templates")
 
 @auth.route("/login")
