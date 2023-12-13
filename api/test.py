@@ -7,37 +7,36 @@ price = 1000
 
 # Use requests.post for sending data in the request body
 
-# response = requests.post(BASE + f"/user/create/", json={
-#     "name":"blaq", 
-#     "email":"fa.mail", 
+# response = requests.post(BASE + f"/users/", json={
+#     "name":"baddest", 
+#     "email":"oloko.mail", 
 #     "password":"passer",
 # })
 
-response = requests.get(BASE + f"/user/get/")
+# response = requests.get(BASE + f"/user/get/")
 
 
 
-
-# response = requests.post(BASE + f"/dog/create/", json={
-#     "name":"browner", 
-#     "image":"/image/husky.jpg", 
-#     "breed":"husky", 
-#     "aggression":5, 
-#     "intel":4
+# response = requests.post(BASE + f"/dogs/", json={
+#     "name":"Amica", 
+#     "image":"/websites/image/dogs/alstatian.jpg",
+#     "descrip": "this is a shy dog", 
+#     "breed":"local", 
+#     "aggression":1, 
+#     "intel":2
 # })
 
 
 # response = requests.get(BASE + f"/dog/get/{dog_id}")
 
 
-# response = requests.post(BASE + "/bid/create/", json={
-#     "id_user": 1,
-#     "id_dog": 1,
-#     "initial_price": 20,
-#     "last_price": 40,
-#     "current_price": 30,
-#     "sold": False
-# })
+response = requests.post(BASE + "/bids/", json={
+    "id_user": 2,
+    "id_dog": 7,
+    "current_price": 90000,
+})
+
+# response = requests.get(BASE + f"/bids/")
 
 # Check if the request was successful (status code 200)
 if response.status_code == 200:

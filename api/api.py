@@ -287,6 +287,16 @@ class Bids(Resource):
                     sold = False
                 )
                 db.session.add(bid)
+                db.session.commit()
+                response = {
+                "message": f"New Bid for Dog id {dog_id} by the user id {user_id} received", 
+                "User Id": bid.id_user, 
+                "Dog id": bid.id_dog, 
+                "Initial Price": bid.initial_price,
+                "Last price": bid.last_price,
+                "current price": bid.current_price,
+                }
+                return response, 201
             else:
                 bid_on_dog.id_user = user_id
                 bid_on_dog.last_price = bid_on_dog.current_price
