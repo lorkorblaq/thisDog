@@ -191,6 +191,7 @@ class Dogs(Resource):
         dogs_list = []
         for result in results:
             dog_info = {
+                    "id":result.id,
                     "name":result.name,
                     "image":result.image,
                     "descrip":result.descrip,
@@ -283,25 +284,32 @@ class Bids(Resource):
                     initial_price = current_price, 
                     last_price = current_price, 
                     current_price = current_price, 
+                    sold = False
                 )
                 db.session.add(bid)
-                db.session.commit()
             else:
+                bid_on_dog.id_user = user_id
                 bid_on_dog.last_price = bid_on_dog.current_price
                 bid_on_dog.current_price = current_price
             db.session.commit()
-            return jsonify({
+            response = {
                 "message": f"Bid for user {user_id} received", 
                 "User Id": bid_on_dog.id_user, 
                 "Dog id": bid_on_dog.id_dog, 
                 "Initial Price": bid_on_dog.initial_price,
                 "Last price": bid_on_dog.last_price,
                 "current price": bid_on_dog.current_price,
-            })
+            }
+            return response, 201
                 # 
         except Exception as e:
             db.session.rollback()
-            abort(500, message=f"Error: {str(e)}")
+            if not user:
+                abort(404, message=f"User with ID {user_id} not found")
+            elif not dog:
+                abort(404, message=f"Dog with ID {dog_id} not found")
+
+           
 
         # Do something with the bid information
     # @marshal_with(resource_fields_bid)

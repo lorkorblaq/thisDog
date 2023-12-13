@@ -31,9 +31,9 @@ price = 1000
 
 
 response = requests.post(BASE + "/bids/", json={
-    "id_user": 1,
-    "id_dog": 1,
-    "current_price": 12000,
+    "id_user": 3,
+    "id_dog": 3,
+    "current_price": 700000,
 })
 
 # response = requests.get(BASE + f"/bids/")
