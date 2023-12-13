@@ -18,12 +18,21 @@ price = 1000
 
 
 # response = requests.post(BASE + f"/dogs/", json={
+<<<<<<< HEAD
 #     "name":"Amica", 
 #     "image":"/websites/image/dogs/alstatian.jpg",
 #     "descrip": "this is a shy dog", 
 #     "breed":"local", 
 #     "aggression":1, 
 #     "intel":2
+=======
+#     "name":"bluer", 
+#     "image":"/websites/image/dogs/alstatian.jpg",
+#     "descrip": "this is a lovely dog", 
+#     "breed":"alstatian", 
+#     "aggression":3, 
+#     "intel":7
+>>>>>>> 887d62b22d014b080555912238769495f7a44b29
 # })
 
 
@@ -31,9 +40,15 @@ price = 1000
 
 
 response = requests.post(BASE + "/bids/", json={
+<<<<<<< HEAD
     "id_user": 2,
     "id_dog": 7,
     "current_price": 90000,
+=======
+    "id_user": 3,
+    "id_dog": 3,
+    "current_price": 700000,
+>>>>>>> 887d62b22d014b080555912238769495f7a44b29
 })
 
 # response = requests.get(BASE + f"/bids/")
