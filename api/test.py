@@ -5,53 +5,57 @@ user_id = 9988
 dog_id = 2
 price = 1000
 
-# Use requests.post for sending data in the request body
 
 # response = requests.post(BASE + f"/users/", json={
 #     "name":"baddest", 
-#     "email":"oloko.mail", 
+#     "email":"ooko.mail", 
 #     "password":"passer",
 # })
 
-# response = requests.get(BASE + f"/user/get/")
+# response = requests.put(BASE + f"/user/1/", json={
+#     "name":"beast", 
+#     "email":"olofemi.mail", 
+#     "password":" road",
+# })
+
+# response = requests.get(BASE + f"/user/1/")
+# response = requests.delete(BASE + f"/user/3/")
 
 
 
 # response = requests.post(BASE + f"/dogs/", json={
-<<<<<<< HEAD
 #     "name":"Amica", 
 #     "image":"/websites/image/dogs/alstatian.jpg",
 #     "descrip": "this is a shy dog", 
 #     "breed":"local", 
 #     "aggression":1, 
 #     "intel":2
-=======
-#     "name":"bluer", 
-#     "image":"/websites/image/dogs/alstatian.jpg",
-#     "descrip": "this is a lovely dog", 
-#     "breed":"alstatian", 
-#     "aggression":3, 
-#     "intel":7
->>>>>>> 887d62b22d014b080555912238769495f7a44b29
 # })
+
+# response = requests.put(BASE + f"/dog/1/", json={
+#     "name":"Amica", 
+#     "breed":"tomfor", 
+#     "descrip":"very shy dog",
+#     "intel":89
+# })
+
+response = requests.delete(BASE + "/dog/3/")
 
 
 # response = requests.get(BASE + f"/dog/get/{dog_id}")
 
 
-response = requests.post(BASE + "/bids/", json={
-<<<<<<< HEAD
-    "id_user": 2,
-    "id_dog": 7,
-    "current_price": 90000,
-=======
-    "id_user": 3,
-    "id_dog": 3,
-    "current_price": 700000,
->>>>>>> 887d62b22d014b080555912238769495f7a44b29
-})
 
-# response = requests.get(BASE + f"/bids/")
+
+
+# response = requests.post(BASE + "/bids/", json={
+#     "id_user": 2,
+#     "id_dog": 1,
+#     "current_price": 90000,
+# })
+
+# response = requests.get(BASE + f"/bid/50")
+# response = requests.delete(BASE + f"/bid/7/")
 
 # Check if the request was successful (status code 200)
 if response.status_code == 200:

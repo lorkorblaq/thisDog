@@ -1,0 +1,22 @@
+
+Alembic is a database migration tool for SQLAlchemy. It provides a set of commands that you can use to manage database migrations. Here are some commonly used commands in Alembic:
+
+alembic init <directory>: Initializes a new Alembic project in the specified directory. This command creates the necessary directory structure and configuration files for Alembic.
+
+alembic revision --autogenerate -m "<message>": Generates a new migration script based on the changes detected in the SQLAlchemy models. The <message> parameter is a short description of the migration.
+
+alembic upgrade head: Applies all pending migrations to the database, bringing it up to the latest version.
+
+alembic upgrade <revision>: Upgrades the database to a specific revision. The <revision> parameter is the target revision you want to upgrade to.
+
+alembic downgrade <revision>: Downgrades the database to a specific revision. The <revision> parameter is the target revision you want to downgrade to.
+
+alembic current: Shows the current revision of the database.
+
+alembic history: Shows the revision history of the database, including the applied and pending migrations.
+
+alembic show <revision>: Shows the details of a specific revision, including the migration script and its upgrade and downgrade methods.
+
+alembic stamp <revision>: Sets the current revision of the database without running any migrations. This is useful when you have an existing database that is not managed by Alembic.
+
+These are just a few of the commands available in Alembic. You can run alembic --help to see the full list of commands and their descriptions.

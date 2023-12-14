@@ -1,0 +1,2 @@
+ondelete = set_null for Bidder.user_id
+ondelete = cascade for Bidder.dog_id
