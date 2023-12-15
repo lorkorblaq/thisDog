@@ -3,7 +3,7 @@ from sqlalchemy import create_engine, Column, Interger, DateTime, String, Sequen
 from sqlalchemy.ext.declarative import declarative_base 
 from sqlalchemy.orm import relationship, sessionmaker
 
-password= 518Oloko.
+password = "518Oloko."
 Base = declarative_base()
 engine = create_engine(f"mysql+mysqlconnector://root:{password}@localhost/thisdog")
 Base.metadata.create_all(engine)

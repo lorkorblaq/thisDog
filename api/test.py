@@ -39,7 +39,8 @@ price = 1000
 #     "intel":89
 # })
 
-response = requests.delete(BASE + "/dog/3/")
+# response = requests.delete(BASE + "/dog/3/")
+# response = requests.delete(BASE + "/dog/")
 
 
 # response = requests.get(BASE + f"/dog/get/{dog_id}")
