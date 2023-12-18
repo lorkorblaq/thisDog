@@ -1,12 +1,12 @@
 from engine import db
 from datetime import datetime
 
-class Bid(db.Model):
+class Bidder(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    id_user = db.Column(db.Integer, ForeignKey("userz.id"), nullable=False)
+    id_user = db.Column(db.Integer, ForeignKey("userz.id", ondelete='SET NULL'), nullable=True)
     user = relationship("Userz", backref="bids", foreign_keys=[id_user])
-    id_dog = db.Column(db.Integer, ForeignKey('dogz.id'), nullable=False)
+    id_dog = db.Column(db.Integer, ForeignKey('dogz.id', ondelete='CASCADE'), nullable=False)
     dog = relationship("Dogz", backref="bids", foreign_keys=[id_dog])
     initial_price = db.Column(db.Integer, nullable=True)
     last_price = db.Column(db.Integer, nullable=True)

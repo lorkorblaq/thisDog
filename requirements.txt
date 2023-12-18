@@ -13,3 +13,5 @@ Werkzeug==1.0.1
 alembic #run/ alembic init alembic /in directory 
 #alembic revision --autogenerate -m "mirgation"
 #alembic upgrade head
+flask-wtf==0.14.3
+email_validator==1.1.1

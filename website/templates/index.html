@@ -5,22 +5,22 @@
 		<div class="lab">
 			<h2>Hub</h2>
 			<section class="s-lab">
-		{% for dog in dogs["dogs"] %}
-				<article class=" art">
+				{% for dog in dogs["dogs"] %}
+				<article class="col-lg-4 col-md-6">
 					<div class="title">
 						<h3>{{ dog['name'] }}</h3>
 						<h5>{{ dog['breed'] }}</h5>
 					</div>
 					<img src="{{ dog['image'] }}" alt="dog picture">
 					<div class="checks">
-							<div class="highlights1">
-									<div class='no'>
-										Aggression level:{{ dog['aggression'] }} 
-									</div>
-									<div class='locss'>Intelligence level:{{ dog['intel'] }}</div>
-									<div class='locss'>Description:{{ dog['descrip'] }}</div>
-							</div>
-					<button> Make Bid</button>
+						<div class="highlights1">
+								<ul class='no'> Aggression level:{{ dog['aggression'] }} 
+								</ul>
+								<ul class='locss'> Intelligence level:{{ dog['intel'] }}</ul>
+								<ul class='locss'> Description: {{ dog['descrip'] }}</ul>
+						</div>
+						<button class="m-2" onclick="window.location.href='http://127.0.0.1:8080/bids'">Make Bid
+						</button>
 					</div>
 				</article>
 		{% endfor %} 
@@ -28,4 +28,3 @@
 		</div>
 	</main>
 {% endblock %}
-
