@@ -3,8 +3,17 @@
 {% block body %}
         <main>
             <h1>Make YOUR BID</h1>
-            <form action="/" method="post">
-                <input type="text" name="Price" id="price_id">
+            {% if dog_id{{ dog_id }}: %}
+            <h2>{{ dog_id }}</h2>
+            <form action="/" method="post" class="needs-validation" novalidate>
+                <div class="form-group">
+                    <label for="price_id">Price</label>
+                    <input type="text" name="Price" id="price_id" class="form-control" required>
+                    <div class="invalid-feedback">
+                        Please enter a valid price.
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </main>
 {% endblock %}

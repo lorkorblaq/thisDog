@@ -12,7 +12,6 @@ def home():
     
 @views.route("/bids",  strict_slashes=False)
 def bids():
-    response = requests.get(BASE + f"/bids/") 
+    response = requests.get(BASE + f"/dog/")
     bids_data = response.json()
     return render_template("bids.html", bids=bids_data)
-    
